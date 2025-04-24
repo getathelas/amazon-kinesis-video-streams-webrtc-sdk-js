@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="loader.css">
+    <script src="./auth-service.js"></script>
+    <script src="./session-service.js"></script>
+    <script src="./viewer-adapter.js"></script>
+    <script src="./viewer.js"></script>
     <link rel="stylesheet" href="./app.css">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
@@ -32,7 +36,18 @@
                 <datalist id="regionList"></datalist>
                 <div id="region-invalid-feedback" class="invalid-feedback"></div>
             </div>
-            <h4>AWS Credentials</h4>
+            <!-- Replace AWS credentials section with username/password form -->
+            <h4>Athelas Authentication</h4>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" placeholder="Username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password" required>
+            </div>
+            <!-- Remove this section -->
+            <!-- <h4>AWS Credentials</h4>
             <div class="form-group">
                 <label for="accessKeyId">Access Key ID</label>
                 <input type="text" class="form-control" id="accessKeyId" placeholder="Access key id" required>
@@ -44,7 +59,8 @@
             <div class="form-group">
                 <label for="sessionToken">Session Token <small>(optional)</small></label>
                 <input type="password" class="form-control" id="sessionToken" placeholder="Session token">
-            </div>
+            </div> -->
+
             <h4>Signaling Channel</h4>
             <div>
                 <label for="channelName">Channel Name</label>

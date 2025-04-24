@@ -203,9 +203,9 @@ $('#master-button').click(async () => {
 
 function printFormValues(formValues) {
     const copyOfForm = Object.assign({}, formValues);
-    copyOfForm.accessKeyId = copyOfForm.accessKeyId.replace(/./g, '*');
-    copyOfForm.secretAccessKey = copyOfForm.secretAccessKey.replace(/./g, '*');
-    copyOfForm.sessionToken = copyOfForm.sessionToken?.replace(/./g, '*');
+    // copyOfForm.accessKeyId = copyOfForm.accessKeyId.replace(/./g, '*');
+    // copyOfForm.secretAccessKey = copyOfForm.secretAccessKey.replace(/./g, '*');
+    // copyOfForm.sessionToken = copyOfForm.sessionToken?.replace(/./g, '*');
     console.log('[FORM_VALUES] Running the sample with the following options:', copyOfForm);
 }
 
@@ -214,6 +214,36 @@ $('#clear-logs').click(() => {
 });
 
 $('#stop-master-button').click(onStop);
+
+// import { startViewerWithApi } from './viewer-adapter.js';
+//
+// // Replace or modify the event handlers that initialize the viewer
+// document.getElementById('viewer-button').addEventListener('click', async () => {
+//     // Get form values
+//     const formValues = getFormValues();
+//
+//     // Use the adapter pattern to start the viewer with API integration
+//     try {
+//         const localView = document.getElementById('viewer').querySelector('.local-view');
+//         const remoteView = document.getElementById('viewer').querySelector('.remote-view');
+//
+//         // Call the new API-based viewer starter instead of the AWS SDK one
+//         await startViewerWithApi(
+//             localView,
+//             remoteView,
+//             formValues,
+//             handleStatsReport,
+//             handleRemoteMessage
+//         );
+//
+//         // Update UI to show viewer is running
+//         document.getElementById('form').classList.add('d-none');
+//         document.getElementById('viewer').classList.remove('d-none');
+//     } catch (error) {
+//         console.error('Failed to start viewer:', error);
+//         alert('Failed to start viewer: ' + error.message);
+//     }
+// });
 
 $('#viewer-button').click(async () => {
     const form = $('#form');
