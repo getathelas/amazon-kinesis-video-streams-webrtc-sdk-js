@@ -26,12 +26,19 @@
     <div id="main" class="d-none">
         <form id="form" onsubmit="return false">
             <h4>KVS Endpoint</h4>
-            <div class="form-group has-validation" style="position: relative;">
-                <label for="region">Region</label>
-                <input type="text" class="form-control valid" id="region" placeholder="Region" value="us-west-2" autocomplete="off" required>
-                <datalist id="regionList"></datalist>
-                <div id="region-invalid-feedback" class="invalid-feedback"></div>
+            <!-- Update the form to include username and password fields -->
+            <h4>Authentication</h4>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" placeholder="Username" required>
             </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password" required>
+            </div>
+
+            <!-- Keep this section commented out or remove it entirely -->
+            <!--
             <h4>AWS Credentials</h4>
             <div class="form-group">
                 <label for="accessKeyId">Access Key ID</label>
@@ -45,9 +52,9 @@
                 <label for="sessionToken">Session Token <small>(optional)</small></label>
                 <input type="password" class="form-control" id="sessionToken" placeholder="Session token">
             </div>
-            <h4>Signaling Channel</h4>
-            <div>
-                <label for="channelName">Channel Name</label>
+            -->
+
+            <label for="channelName">Channel Name</label>
                 <div class="form-group input-group">
                     <input type="text" class="form-control" id="channelName" placeholder="Channel" required>
                     <div class="input-group-append">
@@ -461,6 +468,9 @@
 <script src="./answerer.js"></script>
 <script src="./master.js"></script>
 <script src="./viewer.js"></script>
+<script src="./auth-service.js"></script>
+<script src="./session-service.js"></script>
+<script src="./viewer-adapter.js"></script>
 <script src="./createSignalingChannel.js"></script>
 <script src="./listStorageChannels.js"></script>
 <script src="./updateMediaStorageConfiguration.js"></script>

@@ -71,8 +71,10 @@ function getRandomClientId() {
 
 function getFormValues() {
     return {
-        region: $('#region').val(),
+        // region: $('#region').val(),
         channelName: $('#channelName').val(),
+        username: $('#username').val(),
+        password: $('#password').val(),
         clientId: $('#clientId').val() || randomClientId,
         sendVideo: $('#sendVideo').is(':checked'),
         sendAudio: $('#sendAudio').is(':checked'),
@@ -87,10 +89,10 @@ function getFormValues() {
         natTraversalDisabled: $('#natTraversalDisabled').is(':checked'),
         forceSTUN: $('#forceSTUN').is(':checked'),
         forceTURN: $('#forceTURN').is(':checked'),
-        accessKeyId: $('#accessKeyId').val(),
+        // accessKeyId: $('#accessKeyId').val(),
         endpoint: $('#endpoint').val() || null,
-        secretAccessKey: $('#secretAccessKey').val(),
-        sessionToken: $('#sessionToken').val() || null,
+        // secretAccessKey: $('#secretAccessKey').val(),
+        // sessionToken: $('#sessionToken').val() || null,
         enableDQPmetrics: $('#enableDQPmetrics').is(':checked'),
         enableProfileTimeline: $('#enableProfileTimeline').is(':checked'),
         sendHostCandidates: $('#send-host').is(':checked'),
@@ -203,9 +205,9 @@ $('#master-button').click(async () => {
 
 function printFormValues(formValues) {
     const copyOfForm = Object.assign({}, formValues);
-    copyOfForm.accessKeyId = copyOfForm.accessKeyId.replace(/./g, '*');
-    copyOfForm.secretAccessKey = copyOfForm.secretAccessKey.replace(/./g, '*');
-    copyOfForm.sessionToken = copyOfForm.sessionToken?.replace(/./g, '*');
+    // copyOfForm.accessKeyId = copyOfForm.accessKeyId.replace(/./g, '*');
+    // copyOfForm.secretAccessKey = copyOfForm.secretAccessKey.replace(/./g, '*');
+    // copyOfForm.sessionToken = copyOfForm.sessionToken?.replace(/./g, '*');
     console.log('[FORM_VALUES] Running the sample with the following options:', copyOfForm);
 }
 
