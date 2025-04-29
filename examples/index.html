@@ -36,7 +36,12 @@
                 <label for="password">Password</label>
                 <input type="password" class="form-control" id="password" placeholder="Password" required>
             </div>
-
+            <!-- Add this after the password field in the form -->
+            <div class="form-group">
+                <label for="sessionId">Session ID <small>(optional)</small></label>
+                <input type="text" class="form-control" id="sessionId" placeholder="Leave empty to create a new session">
+                <small class="form-text text-muted">If provided, will connect to an existing session instead of creating a new one</small>
+            </div>
             <!-- Keep this section commented out or remove it entirely -->
             <!--
             <h4>AWS Credentials</h4>

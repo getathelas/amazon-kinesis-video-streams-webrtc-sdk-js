@@ -264,7 +264,6 @@ async function startViewer(localView, remoteView, formValues, onStatsReport, rem
         console.log('[VIEWER ADAPTER] Starting viewer with API integration');
         viewerButtonPressed = new Date();
 
-
         if (!formValues.username || !formValues.password) {
             throw new Error('Username and password are required');
         }
@@ -276,13 +275,21 @@ async function startViewer(localView, remoteView, formValues, onStatsReport, rem
         viewer.authToken = await loginAndGetToken(formValues.username, formValues.password);
         console.log('[VIEWER ADAPTER] Authentication successful');
 
-        // 3. Create a streaming session
-        viewer.sessionData = await createStreamingSession(viewer.authToken);
-        console.log('[VIEWER ADAPTER] Session created:', `${viewer.sessionData.id}`);
+        // 3. Either get an existing session or create a new one
+        if (formValues.sessionId && formValues.sessionId.trim() !== '') {
+            // Get an existing session if session ID is provided
+            viewer.sessionData = await getStreamingSession(viewer.authToken, formValues.sessionId.trim());
+            console.log('[VIEWER ADAPTER] Using existing session:', viewer.sessionData.id);
+        } else {
+            // Create a new streaming session if no session ID is provided
+            viewer.sessionData = await createStreamingSession(viewer.authToken);
+            console.log('[VIEWER ADAPTER] Session created:', viewer.sessionData.id);
+        }
 
         // 4. Get channel data for the session
         viewer.channelData = await getChannelData(viewer.authToken, viewer.sessionData.id, 'VIEWER');
         console.log('[VIEWER ADAPTER] Channel data retrieved');
+
 
         // 5. Prepare WebRTC configuration
         viewer.channelARN = viewer.channelData.channel_arn;

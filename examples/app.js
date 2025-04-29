@@ -75,6 +75,7 @@ function getFormValues() {
         channelName: $('#channelName').val(),
         username: $('#username').val(),
         password: $('#password').val(),
+        sessionId: $('#sessionId').val(),
         clientId: $('#clientId').val() || randomClientId,
         sendVideo: $('#sendVideo').is(':checked'),
         sendAudio: $('#sendAudio').is(':checked'),
