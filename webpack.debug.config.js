@@ -6,7 +6,7 @@ module.exports = merge(require('./webpack.config'), {
 
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'kvs-webrtc.js',
+        filename: 'kvs-webrtc.min.js',
     },
 
     // Include sourcemaps
