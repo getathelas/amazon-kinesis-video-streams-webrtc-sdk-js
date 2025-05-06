@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>KVS WebRTC Test Page</title>
+    <title>Commure Live Streaming test page</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -19,14 +19,13 @@
 <body>
 
 <div class="container mt-3">
-    <h1>KVS WebRTC Test Page</h1>
-    <p>This is the KVS Signaling Channel WebRTC test page. Use this page to connect to a signaling channel as either the
+    <h1>Commure Live Streaming test page</h1>
+    <p>This is the e. Use this page to connect to a signaling channel as either the
         MASTER or as a VIEWER.</p>
 
     <div class="row loader"></div>
     <div id="main" class="d-none">
         <form id="form" onsubmit="return false">
-            <h4>KVS Endpoint</h4>
             <!-- Update the form to include username and password fields -->
             <h4>Authentication</h4>
             <div class="form-group">
@@ -38,12 +37,7 @@
                 <input type="password" class="form-control" id="password" placeholder="Password" required>
             </div>
             <!-- Add this after the password field in the form -->
-            <div class="form-group">
-                <label for="sessionId">Session ID <small>(optional)</small></label>
-                <input type="text" class="form-control" id="sessionId"
-                       placeholder="Leave empty to automatically connect">
-                <small class="form-text text-muted">If provided, will connect to a specific session</small>
-            </div>
+
             <!-- Keep this section commented out or remove it entirely -->
             <!--
             <h4>AWS Credentials</h4>
@@ -61,13 +55,19 @@
             </div>
             -->
 
-
-
             <details>
                 <summary class="h4">Advanced</summary>
+                <label for="sessionId">Session ID <small>(optional)</small></label>
+                <div class="form-group">
+
+                    <input type="text" class="form-control" id="sessionId"
+                           placeholder="Leave empty to automatically connect">
+                    <small class="form-text text-muted">If provided, will connect to a specific session</small>
+                </div>
+
                 <label for="channelName">Channel Name</label>
                 <div class="form-group input-group">
-                    <input type="text" class="form-control" id="channelName" placeholder="Channel" required>
+                    <input type="text" class="form-control" id="channelName" placeholder="Channel">
                     <div class="input-group-append">
                         <button id="create-channel-button" type="submit" class="btn btn-primary"
                                 title="Create a signaling channel with this name.">Create Channel
@@ -84,8 +84,10 @@
                     <input type="text" class="form-control" id="clientId" placeholder="Client id">
                 </div>
                 <h4>Tracks</h4>
-                <p><small>Control which media types are transmitted to the remote client. For WebRTC Ingestion and Storage
-                    master, both audio and video must be sent, and viewers cannot not send video and optional audio.</small>
+                <p><small>Control which media types are transmitted to the remote client. For WebRTC Ingestion and
+                    Storage
+                    master, both audio and video must be sent, and viewers cannot not send video and optional
+                    audio.</small>
                 </p>
                 <div class="form-group">
                     <div class="form-check-inline">
@@ -120,14 +122,16 @@
                                 </button>
                             </div>
                             <div class="input-group-append">
-                                <button id="update-media-storage-configuration-button" type="submit" class="btn btn-primary"
+                                <button id="update-media-storage-configuration-button" type="submit"
+                                        class="btn btn-primary"
                                         title="Ingest and Store media to a specific Kinesis Video Stream.">Update Media
                                     Storage Configuration
                                 </button>
                             </div>
                         </div>
                         <div class="form-group">
-                            <button id="describe-media-storage-configuration-button" class="btn btn-primary">Describe Media
+                            <button id="describe-media-storage-configuration-button" class="btn btn-primary">Describe
+                                Media
                                 Storage Configuration
                             </button>
                         </div>
@@ -172,7 +176,8 @@
                             <div class="form-group form-check-inline">
                                 <input class="form-check-input" type="checkbox"
                                        id="show-join-storage-session-as-viewer-button">
-                                <label for="show-join-storage-session-as-viewer-button" class="form-check-label">Show button
+                                <label for="show-join-storage-session-as-viewer-button" class="form-check-label">Show
+                                    button
                                     to manually call JoinStorageSessionAsViewer API.</label>
                                 <span data-delay="{ &quot;hide&quot;: 1500 }" data-position="auto" tabindex="0"
                                       class="text-info ml-1" data-toggle="tooltip" data-html="true" title="
@@ -188,7 +193,8 @@
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="resolution" id="widescreen" value="option1"
                                checked>
-                        <label class="form-check-label" for="widescreen">1280x720 <small>(16:9 widescreen)</small></label>
+                        <label class="form-check-label" for="widescreen">1280x720 <small>(16:9
+                            widescreen)</small></label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="resolution" id="fullscreen" value="option2">
@@ -210,7 +216,8 @@
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="natTraversal" id="forceTURN" value="option3">
-                        <label class="form-check-label" for="forceTURN">TURN Only <small>(force cloud relay)</small></label>
+                        <label class="form-check-label" for="forceTURN">TURN Only <small>(force cloud
+                            relay)</small></label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="natTraversal" id="forceSTUN" value="option4">
@@ -224,7 +231,8 @@
                 </div>
                 <div class="form-group">
                     <div class="form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="useTrickleICE" value="useTrickleICE" checked>
+                        <input class="form-check-input" type="checkbox" id="useTrickleICE" value="useTrickleICE"
+                               checked>
                         <label for="useTrickleICE" class="form-check-label">Use trickle ICE</label>
                         <span data-delay="{ &quot;hide&quot;: 1500 }" data-position="auto" tabindex="0"
                               class="text-info ml-1" data-toggle="tooltip" data-html="true" title="
@@ -362,7 +370,7 @@
 
             <hr>
             <div>
-                <button id="master-button" type="submit" class="btn btn-primary">Start Master</button>
+                <button id="master-button" type="submit" class="btn btn-primary" disabled>Start Master</button>
                 <button id="viewer-button" type="submit" class="btn btn-primary">Start Viewer</button>
             </div>
         </form>
@@ -512,38 +520,41 @@
                 </div>
             </div>
         </div>
-
-        <h3 id="logs-header">Logs</h3>
-        <div class="card bg-light mb-3">
-            <div style="display: flex; justify-content: space-between;">
-                <div id="tabs">
-                    <button id="debug-button" class="btn btn-light" onClick="logLevelSelected(event)"
-                            data-level="DEBUG">DEBUG
-                    </button>
-                    <button id="info-button" class="btn btn-primary" onClick="logLevelSelected(event)"
-                            data-level="INFO">INFO
-                    </button>
-                    <button id="warn-button" class="btn btn-light" onClick="logLevelSelected(event)" data-level="WARN">
-                        WARN
-                    </button>
-                    <button id="error-button" class="btn btn-light" onClick="logLevelSelected(event)"
-                            data-level="ERROR">ERROR
-                    </button>
-                </div>
-                <div class="d-inline-flex">
-                    <button id="more-logs" class="btn btn-light" title="Show more logs">+</button>
-                    <button id="less-logs" class="btn btn-light" title="Show less logs">-</button>
-                    <button id="clear-logs" class="btn btn-light">Clear Logs</button>
-                    <div>
-                        <button id="copy-logs" class="btn btn-light" title="Copy logs">
-                            <span id="copy-tooltip" aria-live="assertive" class="text-info" role="tooltip"
-                                  data-position="auto" title="Copied logs to clipboard!">📋</span>
+        <details>
+            <summary class="h4">Logs</summary>
+            <h3 id="logs-header">Logs</h3>
+            <div class="card bg-light mb-3">
+                <div style="display: flex; justify-content: space-between;">
+                    <div id="tabs">
+                        <button id="debug-button" class="btn btn-light" onClick="logLevelSelected(event)"
+                                data-level="DEBUG">DEBUG
+                        </button>
+                        <button id="info-button" class="btn btn-primary" onClick="logLevelSelected(event)"
+                                data-level="INFO">INFO
+                        </button>
+                        <button id="warn-button" class="btn btn-light" onClick="logLevelSelected(event)"
+                                data-level="WARN">
+                            WARN
+                        </button>
+                        <button id="error-button" class="btn btn-light" onClick="logLevelSelected(event)"
+                                data-level="ERROR">ERROR
                         </button>
                     </div>
+                    <div class="d-inline-flex">
+                        <button id="more-logs" class="btn btn-light" title="Show more logs">+</button>
+                        <button id="less-logs" class="btn btn-light" title="Show less logs">-</button>
+                        <button id="clear-logs" class="btn btn-light">Clear Logs</button>
+                        <div>
+                            <button id="copy-logs" class="btn btn-light" title="Copy logs">
+                            <span id="copy-tooltip" aria-live="assertive" class="text-info" role="tooltip"
+                                  data-position="auto" title="Copied logs to clipboard!">📋</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
+                <pre id="logs" class="card-body text-monospace preserve-whitespace"></pre>
             </div>
-            <pre id="logs" class="card-body text-monospace preserve-whitespace"></pre>
-        </div>
+        </details>
     </div>
 </div>
 
