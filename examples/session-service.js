@@ -2,7 +2,7 @@
  * Service for managing streaming sessions via the Athelas API
  */
 function createStreamingSession(token) {
-    return fetch('https://staging-rcm-api.athelas.com/v1/scribe/live-streaming/sessions', {
+    return fetch(`${base_url()}/v1/scribe/live-streaming/sessions`, {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${token}`,
@@ -27,7 +27,7 @@ function createStreamingSession(token) {
 }
 
 function getStreamingSession(token, sessionId) {
-    return fetch(`https://staging-rcm-api.athelas.com/v1/scribe/live-streaming/sessions/${sessionId}`, {
+    return fetch(`${base_url()}/v1/scribe/live-streaming/sessions/${sessionId}`, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${token}`,
@@ -52,7 +52,7 @@ function getStreamingSession(token, sessionId) {
 }
 
 function getStreamingSessions(token) {
-    return fetch(`https://staging-rcm-api.athelas.com/v1/scribe/live-streaming/sessions?session_status=CHANNEL_CREATED`, {
+    return fetch(`${base_url()}/v1/scribe/live-streaming/sessions?session_status=CHANNEL_CREATED`, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${token}`,
@@ -77,7 +77,7 @@ function getStreamingSessions(token) {
 }
 
 function getChannelData(token, sessionId, role = 'VIEWER') {
-    return fetch(`https://staging-rcm-api.athelas.com/v1/scribe/live-streaming/sessions/${sessionId}/channel_data?role=${role}`, {
+    return fetch(`${base_url()}/v1/scribe/live-streaming/sessions/${sessionId}/channel_data?role=${role}`, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${token}`,

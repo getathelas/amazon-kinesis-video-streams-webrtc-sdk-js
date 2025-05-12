@@ -6,7 +6,7 @@ function loginAndGetToken(username, password) {
     formData.append('username', username);
     formData.append('password', password);
 
-    return fetch('https://staging-rcm-api.athelas.com/v1/auth/token', {
+    return fetch(`${base_url()}/v1/auth/token`, {
         method: 'POST',
         body: formData,
     })
