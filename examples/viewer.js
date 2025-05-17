@@ -276,7 +276,7 @@ async function startViewer(localView, remoteView, formValues, onStatsReport, rem
         viewer.authToken = await loginAndGetToken(formValues.username, formValues.password);
         console.log('[VIEWER ADAPTER] Authentication successful');
 
-        // 3. Either get an existing session or create a new one
+
 
         // 3. Either get an existing session, check for available sessions, or create a new one
         if (formValues.sessionId && formValues.sessionId.trim() !== '') {
@@ -303,8 +303,21 @@ async function startViewer(localView, remoteView, formValues, onStatsReport, rem
                 // Fallback to creating a new session
                 viewer.sessionData = await createStreamingSession(viewer.authToken);
                 console.log('[VIEWER ADAPTER] Session created:', viewer.sessionData.id);
+
+                SessionEvents.init(viewer.authToken, viewer.sessionData.id);
+
+                SessionEvents.channelCreated({
+                    channelArn: _channelData.channel_arn,
+                    region: _channelData.region,
+                }).catch((error) => {
+                    console.warn('[VIEWER ADAPTER] Failed to send CHANNEL_CREATED event:', error);
+                });
             }
         }
+
+        SessionEvents.init(viewer.authToken, viewer.sessionData.id)
+
+
 
         // 4. Get channel data for the session
         viewer.channelData = await getChannelData(viewer.authToken, viewer.sessionData.id, 'VIEWER');
@@ -379,8 +392,35 @@ async function startViewer(localView, remoteView, formValues, onStatsReport, rem
         // 9. Set up peer connection
         viewer.peerConnection = new RTCPeerConnection(peerConnectionConfig);
 
-        // 10. Call the existing viewer setup with these parameters
-        // (Customized version of the old startViewer function without AWS SDK calls)
+        viewer.peerConnection.oniceconnectionstatechange = () => {
+            if (viewer.peerConnection.iceConnectionState === 'connected') {
+                SessionEvents.mdsJoined({
+                    clientId: formValues.username,
+                    timestamp: new Date().toISOString(),
+                }).catch((error) => {
+                    console.warn('[VIEWER ADAPTER] Failed to send MDS_JOINED event:', error);
+                });
+
+                // Start the MDS_CONNECTED heartbeat
+                SessionEvents.startHeartbeat(6000, {
+                    clientId: formValues.username,
+                    status: 'active',
+                });
+            }
+
+            if (connectionState === 'disconnected' || connectionState === 'failed' || connectionState === 'closed') {
+                // Send MDS_DISCONNECTED event
+                SessionEvents.mdsDisconnected({
+                    reason: `ICE connection state: ${connectionState}`,
+                    timestamp: new Date().toISOString(),
+                }).catch((error) => {
+                    console.warn('[VIEWER ADAPTER] Failed to send MDS_DISCONNECTED event:', error);
+                });
+
+                // Stop the heartbeat
+                SessionEvents.stopHeartbeat();
+            }
+        };
 
         if (formValues.enableProfileTimeline) {
             setTimeout(profilingCalculations, profilingTestLength * 1000);
@@ -511,38 +551,11 @@ async function startViewer(localView, remoteView, formValues, onStatsReport, rem
         } else {
             console.log('[VIEWER] Not using media ingestion feature');
         }
-
-        // Get signaling channel endpoints
-
-        // metrics.viewer.channelEndpoint.startTime = Date.now();
-        //
-        // const getSignalingChannelEndpointResponse = await kinesisVideoClient
-        //     .send(new AWS.KinesisVideo.GetSignalingChannelEndpointCommand({
-        //         ChannelARN: channelARN,
-        //         SingleMasterChannelEndpointConfiguration: {
-        //             Protocols: ['WSS', 'HTTPS'],
-        //             Role: KVSWebRTC.Role.VIEWER,
-        //         },
-        //     }));
-        //
-        // metrics.viewer.channelEndpoint.endTime = Date.now();
-
         const endpointsByProtocol = viewer.channelData.endpoints.reduce((endpoints, endpoint) => {
             endpoints[endpoint.Protocol] = endpoint.ResourceEndpoint;
             return endpoints;
         }, {});
         console.log('[VIEWER] Endpoints:', endpointsByProtocol);
-
-        // Get ICE server configuration
-
-        // metrics.viewer.iceServerConfig.startTime = Date.now();
-        //
-        //
-        //
-        // metrics.viewer.iceServerConfig.endTime = Date.now();
-        //
-        // Don't add stun if user selects TURN only or NAT traversal disabled
-
         const resolution = formValues.widescreen
             ? {
                   width: { ideal: 1280 },
@@ -702,6 +715,12 @@ async function startViewer(localView, remoteView, formValues, onStatsReport, rem
             console.debug('[VIEWER] ConnectAsViewer ended at', new Date(metrics.viewer.connectAsViewer.endTime));
             console.log('[VIEWER] Connected to signaling service');
             console.log('[VIEWER] Time to connect to signaling:', metrics.viewer.connectAsViewer.endTime - metrics.viewer.connectAsViewer.startTime, 'ms');
+
+            SessionEvents.mdsJoined({
+                timestamp: new Date().toISOString(),
+            }).catch((error) => {
+                console.warn('[VIEWER ADAPTER] Failed to send MDS_JOINED event:', error);
+            });
 
             metrics.viewer.setupMediaPlayer.startTime = Date.now();
             signalingSetUpTime = metrics.viewer.setupMediaPlayer.startTime - viewerButtonPressed.getTime();

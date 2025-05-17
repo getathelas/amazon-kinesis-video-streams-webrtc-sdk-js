@@ -4,7 +4,7 @@ let LOG_LEVEL = 'info'; // Possible values: any value of LOG_LEVELS
 let randomClientId = getRandomClientId(); // Holder for randomly-generated client id
 let channelHelper = null; // Holder for channelHelper
 
-const ENV = 'PROD';
+const ENV = 'DEV';
 
 function base_url() {
     if (ENV === 'PROD') {
@@ -138,6 +138,9 @@ function onStop() {
     if (!ROLE) {
         return;
     }
+
+    SessionEvents.mdsDisconnected();
+    SessionEvents.cleanup();
 
     if (!$('#master').hasClass('d-none')) {
         stopMaster();

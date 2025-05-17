@@ -100,3 +100,35 @@ function getChannelData(token, sessionId, role = 'VIEWER') {
             throw error;
         });
 }
+
+
+function createSessionEvent(token, sessionId, eventType, eventData = {}, eventCount = 1) {
+    return fetch(`${base_url()}/v1/scribe/live-streaming/sessions/${sessionId}/events`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+            event_type: eventType,
+            event_data: eventData,
+            event_count: eventCount
+        }),
+    })
+        .then((response) => {
+            if (!response.ok) {
+                return response.json().then((errorData) => {
+                    throw new Error(`Failed to create session event: ${errorData.message || response.statusText}`);
+                });
+            }
+            return response.json();
+        })
+        .then((data) => {
+            console.log(`[Session Service] Event ${eventType} sent:`, data.data);
+            return data.data;
+        })
+        .catch((error) => {
+            console.error(`[Session Service] Create session event error (${eventType}):`, error);
+            throw error;
+        });
+}
