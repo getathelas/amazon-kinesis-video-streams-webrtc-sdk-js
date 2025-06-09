@@ -29,7 +29,7 @@ const ingestionWithMultiViewerSupportPreviewRegions = ['us-east-1'];
  * @type {number}
  * @default
  */
-const retryIntervalForJoinStorageSession = 6000;
+const retryIntervalForJoinStorageSession = 60000;
 
 /**
  * Seconds to start refreshing the TURN servers before the credentials expire

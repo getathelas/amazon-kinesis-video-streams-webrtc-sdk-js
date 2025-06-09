@@ -276,8 +276,6 @@ async function startViewer(localView, remoteView, formValues, onStatsReport, rem
         viewer.authToken = await loginAndGetToken(formValues.username, formValues.password);
         console.log('[VIEWER ADAPTER] Authentication successful');
 
-
-
         // 3. Either get an existing session, check for available sessions, or create a new one
         if (formValues.sessionId && formValues.sessionId.trim() !== '') {
             // Get an existing session if session ID is provided
@@ -315,9 +313,7 @@ async function startViewer(localView, remoteView, formValues, onStatsReport, rem
             }
         }
 
-        SessionEvents.init(viewer.authToken, viewer.sessionData.id)
-
-
+        SessionEvents.init(viewer.authToken, viewer.sessionData.id);
 
         // 4. Get channel data for the session
         viewer.channelData = await getChannelData(viewer.authToken, viewer.sessionData.id, 'VIEWER');
@@ -392,8 +388,11 @@ async function startViewer(localView, remoteView, formValues, onStatsReport, rem
         // 9. Set up peer connection
         viewer.peerConnection = new RTCPeerConnection(peerConnectionConfig);
 
-        viewer.peerConnection.oniceconnectionstatechange = () => {
-            if (viewer.peerConnection.iceConnectionState === 'connected') {
+        viewer.peerConnection.oniceconnectionstatechange = (stateChangeEvent) => {
+            console.log('[VIEWER] iceconnectionstatechange', stateChangeEvent);
+            const newConnectionState = viewer.peerConnection.iceConnectionState;
+
+            if (newConnectionState === 'connected') {
                 SessionEvents.mdsJoined({
                     clientId: formValues.username,
                     timestamp: new Date().toISOString(),
@@ -402,16 +401,16 @@ async function startViewer(localView, remoteView, formValues, onStatsReport, rem
                 });
 
                 // Start the MDS_CONNECTED heartbeat
-                SessionEvents.startHeartbeat(6000, {
+                SessionEvents.startHeartbeat(60000, {
                     clientId: formValues.username,
                     status: 'active',
                 });
             }
 
-            if (connectionState === 'disconnected' || connectionState === 'failed' || connectionState === 'closed') {
+            if (newConnectionState === 'disconnected' || newConnectionState === 'failed' || newConnectionState === 'closed') {
                 // Send MDS_DISCONNECTED event
                 SessionEvents.mdsDisconnected({
-                    reason: `ICE connection state: ${connectionState}`,
+                    reason: `ICE connection state: ${newConnectionState}`,
                     timestamp: new Date().toISOString(),
                 }).catch((error) => {
                     console.warn('[VIEWER ADAPTER] Failed to send MDS_DISCONNECTED event:', error);
